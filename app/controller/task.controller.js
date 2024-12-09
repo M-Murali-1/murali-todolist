@@ -1,7 +1,9 @@
 const express = require("express");
 
+// Importing the task model here.
 const task = require("../model/task.model.js");
 
+// Logic for getting all the Tasks.
 exports.getAll = (req, res) => {
   task.findAll(req.query, (err, data) => {
     if (err) {
@@ -14,6 +16,7 @@ exports.getAll = (req, res) => {
   });
 };
 
+//Logic for inserting the single row in the tasks table.
 exports.insertOne = (req, res) => {
   let insert_data = {
     content: req.body.content,
@@ -40,15 +43,12 @@ exports.insertOne = (req, res) => {
   });
 };
 
-//Finding the row based on the id of the particular row.
-
+//Logic for getting the particular row based on the id from the tasks table.
 exports.getOne = (req, res) => {
   let id = Number(req.params.id);
   if (isNaN(id) || id <= 0) {
     return res.status(400).json({ message: "Invalid ID Number" });
   }
-
-  //res.send("Welcome to the projects in controller..!");
   task.findOne(id, (err, data) => {
     if (err) {
       res.status(500).json({
@@ -60,7 +60,7 @@ exports.getOne = (req, res) => {
   });
 };
 
-//Deleting the particular based on the id
+// Logic for deleting the particular based on the id from the tasks table.
 exports.deleteOne = (req, res) => {
   let id = Number(req.params.id);
   if (isNaN(id) || id <= 0) {
@@ -83,6 +83,8 @@ exports.deleteOne = (req, res) => {
   });
 };
 
+
+//Logic for deleting all the rows from the tasks table.
 exports.deleteAll = (req, res) => {
   task.deleteAll((err, data) => {
     if (err) {
@@ -95,7 +97,7 @@ exports.deleteAll = (req, res) => {
   });
 };
 
-//Updating the particular based on the id
+//Updating the particular based on the id from the tasks table.
 exports.updateOne = (req, res) => {
   let id = Number(req.params.id);
   if (isNaN(id) || id <= 0) {

@@ -4,9 +4,6 @@ const router = express.Router();
 const app = express();
 app.use(express.json());
 
-
-router.get("/",project.getAll);
-
 // Inserting the Project into the Projects table.
 router.post("/",project.insertOne);
 

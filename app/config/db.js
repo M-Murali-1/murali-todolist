@@ -9,6 +9,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
     console.log("Database had been created successfully..!");
   }
 });
+
 //Enabling the foreign keys in the database.
 db.run("PRAGMA foreign_keys = ON;", (err) => {
   if (err) {
@@ -18,13 +19,13 @@ db.run("PRAGMA foreign_keys = ON;", (err) => {
   }
 });
 
+//Creating the Project table.
 const projectTable = `CREATE TABLE IF NOT EXISTS project (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT,
                     color TEXT,
                     is_favourite BOOLEAN DEFAULT 0
 )`;
-
 db.run(projectTable, (err) => {
   if (err) {
     console.log("Error while creating the Project table..!");
@@ -33,6 +34,7 @@ db.run(projectTable, (err) => {
   }
 });
 
+// Creating the task table.
 const tasksTable = `CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT,
@@ -52,7 +54,6 @@ db.run(tasksTable, (err) => {
   console.log("Tasks table had been created successfully..!");
 });
 
+//Sending the path of the database.
 let required = path.join(__dirname, dbPath);
-console.log(required);
-
 module.exports = { databasename: required };

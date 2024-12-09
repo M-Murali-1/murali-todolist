@@ -3,21 +3,20 @@ const express = require("express");
 //Importing the project model here.
 const project = require("../model/project.model");
 
+// Logic for getting all the Projects.
 exports.getAll = (req, res) => {
-  //res.send("Welcome to the projects in controller..!");
   project.findAll(req.query, (err, data) => {
     if (err) {
-      res
-        .status(500)
-        .json({
-          message: err || "Error while fetching the data from the database..!",
-        });
+      res.status(500).json({
+        message: err || "Error while fetching the data from the database..!",
+      });
       return;
     }
     res.send(data);
   });
 };
-//Posting the single Project into the database.
+
+//Logic for inserting the single row in the Project table.
 exports.insertOne = (req, res) => {
   if (!req.body.name) {
     res.status(400).send({ message: "Name of the project is required..!" });
@@ -27,7 +26,6 @@ exports.insertOne = (req, res) => {
     color: req.body.color,
     is_favourite: req.body.is_favourite || 0,
   };
-  console.log(insert_data);
   project.insert(Object.values(insert_data), (err, data) => {
     if (err) {
       res.status(500).send(err);
@@ -37,29 +35,24 @@ exports.insertOne = (req, res) => {
   });
 };
 
-//Finding the row based on the id of the particular row.
-
+//Logic for getting the particular row based on the id from the project table.
 exports.getOne = (req, res) => {
   let id = Number(req.params.id);
   if (isNaN(id) || id <= 0) {
     return res.status(400).json({ message: "Invalid ID Number" });
   }
-
-  //res.send("Welcome to the projects in controller..!");
   project.findOne(id, (err, data) => {
     if (err) {
-      res
-        .status(500)
-        .json({
-          message: err || "Error while fetching the data from the database..!",
-        });
+      res.status(500).json({
+        message: err || "Error while fetching the data from the database..!",
+      });
       return;
     }
     res.send(data);
   });
 };
 
-//Deleting the particular based on the id
+// Logic for deleting the particular based on the id from the project table.
 exports.deleteOne = (req, res) => {
   let id = Number(req.params.id);
   if (isNaN(id) || id <= 0) {
@@ -67,11 +60,9 @@ exports.deleteOne = (req, res) => {
   }
   project.deleteOne(id, (err, data) => {
     if (err) {
-      res
-        .status(500)
-        .json({
-          message: err || "Error while deleting the data from the database..!",
-        });
+      res.status(500).json({
+        message: err || "Error while deleting the data from the database..!",
+      });
       return;
     }
     if (data === 0) {
@@ -84,22 +75,20 @@ exports.deleteOne = (req, res) => {
   });
 };
 
+//Logic for deleting all the rows from the project table.
 exports.deleteAll = (req, res) => {
-  project.deleteAll((err,data) => {
+  project.deleteAll((err, data) => {
     if (err) {
-      res
-        .status(500)
-        .json({
-          message: err || "Error while deleting the data from the database..!",
-        });
+      res.status(500).json({
+        message: err || "Error while deleting the data from the database..!",
+      });
       return;
     }
     res.status(200).json({ message: data });
   });
 };
 
-
-//Updating the particular based on the id
+//Logic for updating the particular based on the id from the project table.
 exports.updateOne = (req, res) => {
   let id = Number(req.params.id);
   if (isNaN(id) || id <= 0) {
@@ -112,15 +101,12 @@ exports.updateOne = (req, res) => {
     name: req.body.name,
     color: req.body.color,
     is_favourite: req.body.is_favourite || 0,
-    
   };
-  project.updateOne(insert_data,id, (err, data) => {
+  project.updateOne(insert_data, id, (err, data) => {
     if (err) {
-      res
-        .status(500)
-        .json({
-          message: err || "Error while updating the data from the database..!",
-        });
+      res.status(500).json({
+        message: err || "Error while updating the data from the database..!",
+      });
       return;
     }
     if (data === 0) {

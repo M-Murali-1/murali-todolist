@@ -9,8 +9,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
-
-// Finding all the rows and the particular row based on the name as query
+//Query for selecting all the rows in the tasks table.
 exports.findAll = (queries, callback) => {
   let Selectquery = "SELECT * FROM tasks";
   // console.log(queries.name);
@@ -23,8 +22,6 @@ exports.findAll = (queries, callback) => {
     if (err) {
       callback(err, null);
     }
-    // console.log(data);
-
     callback(null, data);
   });
 };
@@ -36,14 +33,11 @@ exports.findprojectID = (id, callback) => {
     if (err) {
       callback(err, null);
     }
-    // if (rows.length === 0) {
-    //   callback(new Error("No row is present with the given id..!"), null);
-    // }
     callback(null, rows);
   });
 };
 
-
+//Query for inserting the single row in the tasks table.
 exports.insert = (insert_data, callback) => {
   const insertQuery =
     "INSERT INTO tasks (content,description,due_date,project_id,is_completed) VALUES (?,?,?,?,?)";
@@ -58,51 +52,60 @@ exports.insert = (insert_data, callback) => {
   });
 };
 
-
+// Query for finding the particular row in the tasks table based on the id.
 exports.findOne = (id, callback) => {
   const Selectquery = `SELECT * FROM tasks WHERE id=? `;
   db.all(Selectquery, [id], (err, rows) => {
     if (err) {
       callback(err, null);
     }
-    // if (rows.length === 0) {
-    //   callback(new Error("No row is present with the given id..!"), null);
-    // }
     callback(null, rows);
   });
 };
 
-
-
-exports.deleteOne = (id,callback)=>{
+// Query for deleting the particular row from the tasks table based on the id.
+exports.deleteOne = (id, callback) => {
   const deleteQuery = "DELETE FROM tasks WHERE id =?";
-  db.run(deleteQuery,[id],function (err) {
-    if(err) {
-      callback(err,null);
+  db.run(deleteQuery, [id], function (err) {
+    if (err) {
+      callback(err, null);
     }
-    // console.log(this.changes);
-    callback(null,this.changes);
-  })
-}
+    callback(null, this.changes);
+  });
+};
 
-exports.deleteAll = (callback)=>{
+
+// Query for deleting the complete tasks table.
+exports.deleteAll = (callback) => {
   const deleteQuery = "DELETE FROM tasks";
-  db.run(deleteQuery,[],function (err) {
-    if(err) {
-      callback(err,null);
+  db.run(deleteQuery, [], function (err) {
+    if (err) {
+      callback(err, null);
     }
-    callback(null,"All rows are deleted successfuly..!")
-  })
-}
+    callback(null, "All rows are deleted successfuly..!");
+  });
+};
 
 
-exports.updateOne=(data,id,callback)=>{
-  const updateQuery = "UPDATE tasks SET content=?,description=?,due_date=?,project_id=?,is_completed=? WHERE id=?";
-  db.run(updateQuery,[data.content,data.description,data.due_date,data.project_id,data.is_completed,id],function (err) {
-    if(err) {
-      callback(err,null);
+// Query for updating the particular row based on the id in the tasks table.
+exports.updateOne = (data, id, callback) => {
+  const updateQuery =
+    "UPDATE tasks SET content=?,description=?,due_date=?,project_id=?,is_completed=? WHERE id=?";
+  db.run(
+    updateQuery,
+    [
+      data.content,
+      data.description,
+      data.due_date,
+      data.project_id,
+      data.is_completed,
+      id,
+    ],
+    function (err) {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, this.changed);
     }
-    callback(null,this.changed);
-  })
-  
-  }
+  );
+};
