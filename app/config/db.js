@@ -1,12 +1,23 @@
 const sqlite3 = require("sqlite3");
-const dbPath = "../config/database.db";
 const path = require("path");
+
+// Define the absolute path to the database file
+const dbPath = path.resolve(__dirname, "../config/database.db");
+console.log(dbPath);
 
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     //console.log("Error while creating the database..!");
   } else {
     console.log("Database had been created successfully..!");
+    // Enabling the Foreign keys or the table projects
+    db.run("PRAGMA foreign_keys = ON;", (err) => {
+      if (err) {
+        console.error("Failed to enable foreign keys:", err.message);
+      } else {
+        console.log("Foreign keys are enabled.");
+      }
+    });
   }
 });
 
@@ -46,5 +57,5 @@ db.run(tasksTable, (err) => {
 });
 
 //Sending the path of the database.
-let required = path.join(__dirname, dbPath);
-module.exports = { databasename: required };
+//let required = path.join(__dirname, dbPath);
+module.exports =db;

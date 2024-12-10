@@ -1,22 +1,5 @@
 const sqlite3 = require("sqlite3");
-const dbPath = require("../config/db").databasename;
-
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) {
-    console.error("Error while connecting the Database..!");
-  } else {
-    console.log("Connected to the database Successfully..!");
-    // Enabling the Foreign keys or the table projects
-    
-    db.run("PRAGMA foreign_keys = ON;", (err) => {
-      if (err) {
-        console.error("Failed to enable foreign keys:", err.message);
-      } else {
-        console.log("Foreign keys are enabled.");
-      }
-    });
-  }
-});
+const db = require("../config/db");
 
 //Query for inserting the single row in the project table.
 exports.insert = (insert_data, callback) => {

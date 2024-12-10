@@ -1,13 +1,5 @@
 const sqlite3 = require("sqlite3");
-const dbPath = require("../config/db").databasename;
-
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) {
-    console.error("Error while connecting the Database..!");
-  } else {
-    console.log("Connected to the database Successfully..!");
-  }
-});
+const db = require("../config/db");
 
 //Query for selecting all the rows in the tasks table.
 exports.findAll = (queries, callback) => {
