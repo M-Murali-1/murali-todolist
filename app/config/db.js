@@ -10,15 +10,6 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
-//Enabling the foreign keys in the database.
-db.run("PRAGMA foreign_keys = ON;", (err) => {
-  if (err) {
-    console.error("Failed to enable foreign keys:", err.message);
-  } else {
-    console.log("Foreign keys are enabled.");
-  }
-});
-
 //Creating the Project table.
 const projectTable = `CREATE TABLE IF NOT EXISTS project (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
