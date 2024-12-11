@@ -22,11 +22,12 @@ exports.insertOne = async (req, res) => {
       name: req.body.name,
       color: req.body.color,
       is_favourite: req.body.is_favourite || 0,
+      user_id:req.body.user_id
     };
     const data = await project.insert(Object.values(insert_data));
     res.json({ id: data.lastID, ...insert_data });
   } catch (err) {
-    res.status(500).send(err);
+    res.status(500).send(err.message);
   }
 };
 
@@ -34,9 +35,6 @@ exports.insertOne = async (req, res) => {
 exports.getOne = async (req, res) => {
   try {
     let id = Number(req.params.id);
-    if (isNaN(id) || id <= 0) {
-      return res.status(400).json({ message: "Invalid ID Number" });
-    }
     const data = await project.findOne(id);
     res.send(data);
   } catch (err) {
@@ -50,9 +48,6 @@ exports.getOne = async (req, res) => {
 exports.deleteOne = async (req, res) => {
   try {
     let id = Number(req.params.id);
-    if (isNaN(id) || id <= 0) {
-      return res.status(400).json({ message: "Invalid ID Number" });
-    }
     const data = await project.deleteOne(id);
     if (data.changes === 0) {
       return res
@@ -63,7 +58,7 @@ exports.deleteOne = async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({
-      message: err || "Error while deleting the data from the database..!",
+      message: err.message || "Error while deleting the data from the database..!",
     });
   }
 };
@@ -84,13 +79,11 @@ exports.deleteAll = async (req, res) => {
 exports.updateOne = async (req, res) => {
   try {
     let id = Number(req.params.id);
-    if (isNaN(id) || id <= 0) {
-      return res.status(400).json({ message: "Invalid ID Number" });
-    }
     let insert_data = {
       name: req.body.name,
       color: req.body.color,
       is_favourite: req.body.is_favourite || 0,
+      user_id:req.body.user_id
     };
     const data = project.updateOne(insert_data, id);
     if (data.changes === 0) {

@@ -1,4 +1,6 @@
 const express = require("express");
+const yup = require("yup");
+console.log(yup);
 
 // Importing the task model here.
 const task = require("../model/task.model.js");
@@ -6,7 +8,16 @@ const task = require("../model/task.model.js");
 // Logic for getting all the Tasks.
 exports.getAll = async (req, res) => {
   try {
-    const rows = await task.findAll(req.query);
+    let findData = {
+      content:req.query.content,
+      project_id:req.query.project_id,
+      due_date:req.query.due_date,
+      is_completed : req.query.is_completed,
+      created_at:req.query.created_at
+    }
+    let dataSend = Object.entries(findData).filter((data)=>data[1]!==undefined);
+
+    const rows = await task.findAll(dataSend);
     res.status(200).json(rows);
   } catch (err) {
     res.status(500).json({
@@ -45,9 +56,6 @@ exports.insertOne = async (req, res) => {
 exports.getOne = async (req, res) => {
   try {
     let id = Number(req.params.id);
-    if (isNaN(id) || id <= 0) {
-      return res.status(400).json({ message: "Invalid ID Number" });
-    }
     const data = await task.findOne(id);
     res.send(data);
   } catch (err) {
@@ -61,9 +69,6 @@ exports.getOne = async (req, res) => {
 exports.deleteOne = async (req, res) => {
   try {
     let id = Number(req.params.id);
-    if (isNaN(id) || id <= 0) {
-      return res.status(400).json({ message: "Invalid ID Number" });
-    }
     const data = await task.deleteOne(id);
     if (data.changed === 0) {
       return res
@@ -94,9 +99,6 @@ exports.deleteAll = (req, res) => {
 exports.updateOne = (req, res) => {
   try {
     let id = Number(req.params.id);
-    if (isNaN(id) || id <= 0) {
-      return res.status(400).json({ message: "Invalid ID Number" });
-    }
     let insert_data = {
       content: req.body.content,
       description: req.body.description,
