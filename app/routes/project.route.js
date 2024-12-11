@@ -12,14 +12,14 @@ router.post("/",validation.validateProjectInsertion,project.insertOne);
 router.get("/",project.getAll);
 
 //Getting the project based on it id.
-router.get("/:id",project.getOne);
+router.get("/:id",validation.validateId,project.getOne);
 
 //Deleting the particular row based on the id
-router.delete("/:id",project.deleteOne);
+router.delete("/:id",validation.validateId,project.deleteOne);
 
 //Deleting all the projects
 router.delete("/",project.deleteAll);
 
 //Updating the existing projects
-router.put("/:id",project.updateOne);
+router.put("/:id",validation.validateId,project.updateOne);
 module.exports = router;

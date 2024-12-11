@@ -1,6 +1,7 @@
 const express = require("express");
 const task = require("../controller/task.controller");
 const router = express.Router();
+const validation = require("../middleware/validations");
 const app = express();
 app.use(express.json());
 
@@ -11,14 +12,14 @@ router.post("/",task.insertOne);
 router.get("/",task.getAll);
 
 //Getting the task based on it id.
-router.get("/:id",task.getOne);
+router.get("/:id",validation.validateId,task.getOne);
 
 //Deleting the particular row based on the id
-router.delete("/:id",task.deleteOne);
+router.delete("/:id",validation.validateId,task.deleteOne);
 
 //Deleting all the projects
 router.delete("/",task.deleteAll);
 
 //Updating the existing tasks
-router.put("/:id",task.updateOne);
+router.put("/:id",validation.validateId,task.updateOne);
 module.exports = router;
