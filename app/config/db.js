@@ -21,12 +21,29 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
+//Creating the User table.
+const userTable = `CREATE TABLE IF NOT EXISTS user (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    email TEXT NOT NULL,
+                    UNIQUE(name,email)
+  )`;
+db.run(userTable, (err) => {
+  if (err) {
+    console.log("Error while creating the user table..!");
+  } else {
+    console.log("User table created successfully..!");
+  }
+});
+
 //Creating the Project table.
 const projectTable = `CREATE TABLE IF NOT EXISTS project (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT,
                     color TEXT,
-                    is_favourite BOOLEAN DEFAULT 0
+                    is_favourite BOOLEAN DEFAULT FALSE,
+                    user_id INTEGER,
+                    FOREIGN KEY(user_id) REFERENCES userTable(id) ON DELETE CASCADE
 )`;
 db.run(projectTable, (err) => {
   if (err) {
@@ -55,7 +72,24 @@ db.run(tasksTable, (err) => {
   }
   console.log("Tasks table had been created successfully..!");
 });
+const commentTable = `CREATE TABLE IF NOT EXISTS comment (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  content TEXT,
+  posted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  project_id INTEGER,
+  task_id INTEGER,
+  FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE,
+  FOREIGN KEY (task_id) REFERENCES task(id) ON DELETE CASCADE
+)`;
+db.run(commentTable,(err)=>{
+  if(err) {
+    console.log("Error while creating the comments table..!",err.message);
+  }
+  else {
+    console.log("comments table had been created successfully..!");    
+  }
+})
 
 //Sending the path of the database.
 //let required = path.join(__dirname, dbPath);
-module.exports =db;
+module.exports = db;
