@@ -43,7 +43,7 @@ const projectTable = `CREATE TABLE IF NOT EXISTS project (
                     color TEXT,
                     is_favourite BOOLEAN DEFAULT FALSE,
                     user_id INTEGER,
-                    FOREIGN KEY(user_id) REFERENCES userTable(id) ON DELETE CASCADE
+                    FOREIGN KEY(user_id) REFERENCES user(id) ON DELETE CASCADE
 )`;
 db.run(projectTable, (err) => {
   if (err) {
@@ -54,12 +54,12 @@ db.run(projectTable, (err) => {
 });
 
 // Creating the task table.
-const tasksTable = `CREATE TABLE IF NOT EXISTS tasks (
+const tasksTable = `CREATE TABLE IF NOT EXISTS task (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT,
     description TEXT,
     due_date DATETIME,
-    is_completed BOOLEAN DEFAULT 0,
+    is_completed BOOLEAN DEFAULT FALSE,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     project_id INTEGER,
     FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE
@@ -89,7 +89,16 @@ db.run(commentTable,(err)=>{
     console.log("comments table had been created successfully..!");    
   }
 })
-
+// db.run(`INSERT INTO user (name, email) VALUES (?, ?)`,
+//   ["Murali", "Murali@example.com"],(err)=>{
+//   if(err) {
+//     console.log("Error occured while inserting the data..!",err.message);
+//   }
+//   else {
+//     console.log("Data inserted..!");
+    
+//   }
+// } )
 //Sending the path of the database.
 //let required = path.join(__dirname, dbPath);
 module.exports = db;

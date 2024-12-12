@@ -4,7 +4,7 @@ const methods = require("./db");
 //Query for inserting the single row in the project table.
 exports.insert = (insert_data) => {
   const insertQuery =
-    "INSERT INTO project (name,color,is_favourite) VALUES (?,?,?)";
+    "INSERT INTO project (name,color,is_favourite,user_id) VALUES (?,?,?,?)";
   return methods.runMethod(insertQuery, insert_data);
 };
 
@@ -39,9 +39,24 @@ exports.deleteAll = () => {
 };
 
 // Query for updating the particular row based on the id in the project table
-exports.updateOne = (data, id) => {
-  const updateQuery =
-    "UPDATE project SET name=?,color=?,is_favourite=? WHERE id=?";
-  const placeholders = [data.name, data.color, data.is_favourite, id];
+exports.updateOne = (array_data, id) => {
+  let updateQuery =
+    "UPDATE project SET ";
+  let placeholders = [];
+  console.log(array_data);
+  for(let i=0;i<array_data.length;i++) {
+    console.log(`${array_data[i][0]}=?`);
+    placeholders.push(array_data[i][1]);
+    updateQuery+=`${array_data[i][0]}=?`;
+    if(i==array_data.length-1) {
+      updateQuery+=" WHERE id=?";
+      continue;
+    }
+    updateQuery+=`,`
+    
+    
+  }
+  placeholders.push(id);
+  console.log(updateQuery,placeholders);
   return methods.runMethod(updateQuery, placeholders);
 };

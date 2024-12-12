@@ -6,10 +6,10 @@ const app = express();
 app.use(express.json());
 
 // Inserting the Project into the Projects table.
-router.post("/",task.insertOne);
+router.post("/",validation.validateTaskInsertion,task.insertOne);
 
 //Getting all the projects present in the database
-router.get("/",task.getAll);
+router.get("/",validation.validateTaskSelect,task.getAll);
 
 //Getting the task based on it id.
 router.get("/:id",validation.validateId,task.getOne);
@@ -21,5 +21,5 @@ router.delete("/:id",validation.validateId,task.deleteOne);
 router.delete("/",task.deleteAll);
 
 //Updating the existing tasks
-router.put("/:id",validation.validateId,task.updateOne);
+router.put("/:id",validation.validateId,validation.validateTaskSelect,task.updateOne);
 module.exports = router;

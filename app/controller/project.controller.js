@@ -21,7 +21,7 @@ exports.insertOne = async (req, res) => {
     let insert_data = {
       name: req.body.name,
       color: req.body.color,
-      is_favourite: req.body.is_favourite || 0,
+      is_favourite: req.body.is_favourite || false,
       user_id:req.body.user_id
     };
     const data = await project.insert(Object.values(insert_data));
@@ -82,10 +82,13 @@ exports.updateOne = async (req, res) => {
     let insert_data = {
       name: req.body.name,
       color: req.body.color,
-      is_favourite: req.body.is_favourite || 0,
+      is_favourite: req.body.is_favourite,
       user_id:req.body.user_id
     };
-    const data = project.updateOne(insert_data, id);
+    let dataSent = Object.entries(insert_data).filter((data)=>data[1]!==undefined);
+    // console.log(dataSent);
+    
+    const data = project.updateOne(dataSent, id);
     if (data.changes === 0) {
       return res
         .status(404)

@@ -1,7 +1,4 @@
 const express = require("express");
-const yup = require("yup");
-console.log(yup);
-
 // Importing the task model here.
 const task = require("../model/task.model.js");
 
@@ -13,7 +10,8 @@ exports.getAll = async (req, res) => {
       project_id:req.query.project_id,
       due_date:req.query.due_date,
       is_completed : req.query.is_completed,
-      created_at:req.query.created_at
+      created_at:req.query.created_at,
+      description:req.query.description
     }
     let dataSend = Object.entries(findData).filter((data)=>data[1]!==undefined);
 
@@ -21,7 +19,7 @@ exports.getAll = async (req, res) => {
     res.status(200).json(rows);
   } catch (err) {
     res.status(500).json({
-      message: err || "Error while fetching the data from the database..!",
+      message: err.message || "Error while fetching the data from the database..!",
     });
   }
 };
@@ -99,16 +97,11 @@ exports.deleteAll = (req, res) => {
 exports.updateOne = (req, res) => {
   try {
     let id = Number(req.params.id);
-    let insert_data = {
-      content: req.body.content,
-      description: req.body.description,
-      due_date: `${req.body.due_date} 00:00:00`,
-      project_id: req.body.project_id,
-      is_completed: req.body.is_completed || 0,
-    };
-    console.log(insert_data);
+    // let insert_data = Object.entries(req.body).filter((data)=>data[1]!==undefined);
+    // console.log(insert_data);
+    // console.log(req.body);
     
-    const data = task.updateOne(insert_data, id);
+    const data = task.updateOne(req.body, id);
     if (data.changed === 0) {
       return res
         .status(404)
