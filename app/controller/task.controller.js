@@ -30,7 +30,7 @@ exports.insertOne = async (req, res) => {
     let insert_data = {
       content: req.body.content,
       description: req.body.description,
-      due_date: `${req.body.due_date} 00:00:00`,
+      due_date: `${req.body.due_date}`,
       project_id: req.body.project_id,
       is_completed: req.body.is_completed || 0,
     };
