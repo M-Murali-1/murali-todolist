@@ -9,15 +9,11 @@ exports.insert = (insert_data) => {
 };
 
 //Query for selecting all the rows in the project table.
-exports.findAll = (queries) => {
-  let Selectquery = "SELECT * FROM project";
-  console.log(queries.name);
-  let placeholder = [];
-  if (queries.name !== undefined) {
-    Selectquery = `SELECT * FROM project WHERE name LIKE ? `;
-    placeholder.push(queries.name);
-  }
-  return methods.allMethod(Selectquery, placeholder);
+exports.findAll = (findData) => {
+  let SelectQuery = "SELECT * FROM project";
+  //Dynamically constructing the select query
+  let data = methods.constructSelectQuery(SelectQuery,findData);
+  return methods.allMethod(data.SelectQuery, data.placeholder);
 };
 
 // Query for finding the particular row in the project table based on the id.
@@ -40,23 +36,9 @@ exports.deleteAll = () => {
 
 // Query for updating the particular row based on the id in the project table
 exports.updateOne = (array_data, id) => {
-  let updateQuery =
-    "UPDATE project SET ";
-  let placeholders = [];
-  console.log(array_data);
-  for(let i=0;i<array_data.length;i++) {
-    console.log(`${array_data[i][0]}=?`);
-    placeholders.push(array_data[i][1]);
-    updateQuery+=`${array_data[i][0]}=?`;
-    if(i==array_data.length-1) {
-      updateQuery+=" WHERE id=?";
-      continue;
-    }
-    updateQuery+=`,`
-    
-    
-  }
-  placeholders.push(id);
-  console.log(updateQuery,placeholders);
-  return methods.runMethod(updateQuery, placeholders);
+  let updateQuery = "UPDATE project SET ";
+  let data = methods.constructUpdateQuery(updateQuery, array_data);
+  data.placeholders.push(id);
+  //console.log(updateQuery,placeholders);
+  return methods.runMethod(data.updateQuery, data.placeholders);
 };

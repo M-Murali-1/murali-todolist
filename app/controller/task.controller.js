@@ -100,8 +100,18 @@ exports.updateOne = (req, res) => {
     // let insert_data = Object.entries(req.body).filter((data)=>data[1]!==undefined);
     // console.log(insert_data);
     // console.log(req.body);
+    let insert_data = {
+      content: req.body.content,
+      description: req.body.description,
+      project_id: req.body.project_id,
+      is_completed: req.body.is_completed,
+    };
+    let dataSent = Object.entries(insert_data).filter((data)=>data[1]!==undefined);
+    if(req.body.due_date!=undefined) {
+      dataSent.push(['due_date',`${req.body.due_date} 00:00:00`])
+    }
     
-    const data = task.updateOne(req.body, id);
+    const data = task.updateOne(dataSent, id);
     if (data.changed === 0) {
       return res
         .status(404)
@@ -111,7 +121,7 @@ exports.updateOne = (req, res) => {
     }
   } catch (err) {
     res.status(500).json({
-      message: err || "Error while updating the data from the database..!",
+      message: err.message || "Error while updating the data from the database..!",
     });
   }
 };

@@ -6,11 +6,18 @@ const project = require("../model/project.model");
 // Logic for getting all the Projects.
 exports.getAll = async (req, res) => {
   try {
-    const rows = await project.findAll(req.query);
+    let findData = {
+      name: req.query.name,
+      color: req.query.color,
+      is_favourite: req.query.is_favourite,
+      user_id:req.query.user_id
+    };
+    let dataSend = Object.entries(findData).filter((data)=>data[1]!==undefined);
+    const rows = await project.findAll(dataSend);
     res.status(200).json(rows);
   } catch (err) {
     res.status(500).json({
-      message: err || "Error while fetching the data from the database..!",
+      message: err.message || "Error while fetching the data from the database..!",
     });
   }
 };
